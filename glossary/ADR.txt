@@ -1,0 +1,164 @@
+ADR مخفف **Architecture Decision Record** است.
+
+به زبان ساده، ADR یک سند کوتاه است که توضیح می‌دهد:
+
+> **«چرا این تصمیم معماری را گرفتیم؟»**
+
+دقت کن که ADR بیشتر روی **چرایی (Why)** تمرکز دارد، نه صرفاً **اینکه چه چیزی پیاده‌سازی شده (What)**.
+
+---
+
+## چرا ADR مهم است؟
+
+فرض کن وارد یک پروژه قدیمی شده‌ای و می‌بینی:
+
+* به جای MySQL از Redis استفاده شده.
+* به جای RabbitMQ از Kafka استفاده شده.
+* به جای Monolith، پروژه Microservice است.
+* همه APIها Version دارند.
+
+اولین سوالی که به ذهنت می‌رسد این است:
+
+> **چرا؟**
+
+کد معمولاً فقط نشان می‌دهد **چه کاری انجام شده**، اما به ندرت توضیح می‌دهد **چرا آن تصمیم گرفته شده است**.
+
+ADR دقیقاً برای پاسخ به همین سؤال است.
+
+---
+
+## یک مثال واقعی
+
+فرض کن تیم بین Redis و RabbitMQ مردد بوده است.
+
+ADR می‌تواند چیزی شبیه این باشد:
+
+```text
+# ADR-001: Use Redis Streams for Background Jobs
+
+Status:
+Accepted
+
+Context:
+We need a queue for processing image uploads.
+
+Options:
+- RabbitMQ
+- Redis Streams
+- Amazon SQS
+
+Decision:
+We chose Redis Streams.
+
+Reasons:
+- We already use Redis.
+- Infrastructure is simpler.
+- Our workload is moderate.
+- Low operational cost.
+
+Consequences:
+Pros:
+- Easier deployment
+- Lower latency
+
+Cons:
+- Fewer routing capabilities than RabbitMQ.
+```
+
+شش ماه بعد اگر کسی بپرسد:
+
+> چرا RabbitMQ استفاده نکردیم؟
+
+نیازی نیست از اعضای قدیمی تیم بپرسد؛ کافی است ADR را بخواند.
+
+---
+
+## ADR معمولاً چه بخش‌هایی دارد؟
+
+اکثر ADRها این ساختار را دارند:
+
+| بخش          | توضیح                                           |
+| ------------ | ----------------------------------------------- |
+| Title        | عنوان تصمیم                                     |
+| Status       | Accepted، Proposed، Deprecated، Superseded و... |
+| Context      | مسئله یا نیاز پروژه                             |
+| Decision     | تصمیم نهایی                                     |
+| Consequences | مزایا، معایب و پیامدها                          |
+| Alternatives | گزینه‌های دیگری که بررسی شدند                   |
+
+---
+
+## چند نمونه ADR در یک پروژه
+
+```
+docs/
+└── adr/
+    ├── 0001-use-postgresql.md
+    ├── 0002-use-redis-cache.md
+    ├── 0003-use-grpc-between-services.md
+    ├── 0004-use-kubernetes.md
+    └── 0005-authentication-with-jwt.md
+```
+
+هر فایل فقط درباره **یک تصمیم** است.
+
+---
+
+## چه چیزهایی ADR نیستند؟
+
+ADR جای این موارد را نمی‌گیرد:
+
+* API Documentation
+* README
+* Runbook
+* User Manual
+* Diagramها
+
+ADR فقط برای **تصمیم‌های مهم معماری یا فنی** است.
+
+---
+
+## ارتباط ADR با Git
+
+یکی از دلایل محبوبیت ADR این است که کنار کد نگهداری می‌شود.
+
+مثلاً:
+
+```
+Feature:
+Add Redis Cache
+
+Pull Request:
+
+✓ Redis implementation
+✓ Tests
+✓ ADR-0007 explaining why Redis was chosen
+```
+
+در نتیجه، تاریخچه تصمیم‌ها نیز مانند کد در Git ثبت می‌شود و اگر تصمیمی تغییر کند، می‌توان دید چه زمانی و به چه دلیل تغییر کرده است.
+
+---
+
+## چرا در عصر AI اهمیت ADR بیشتر شده است؟
+
+پستی که خواندی به نکته درستی اشاره کرده است.
+
+وقتی یک دستیار هوشمند یا ابزار کدنویسی مبتنی بر AI به مخزن پروژه دسترسی دارد، اگر فقط کد را ببیند، ممکن است نداند چرا یک الگوی خاص انتخاب شده است.
+
+اما اگر فایل‌هایی مثل این را هم بخواند:
+
+* `docs/adr/0003-use-grpc.md`
+* `docs/architecture.md`
+* `docs/caching.md`
+
+می‌تواند بفهمد:
+
+* چرا gRPC انتخاب شده است.
+* چرا Redis فقط برای Cache استفاده می‌شود.
+* چرا بعضی سرویس‌ها باید Eventually Consistent باشند.
+
+به همین دلیل، ابزارهای AI معمولاً روی پروژه‌هایی که مستندات ساخت‌یافته و نزدیک به کد دارند، پاسخ‌های دقیق‌تر و سازگارتر ارائه می‌دهند.
+
+---
+
+اگر به سمت بک‌اند و معماری نرم‌افزار (مثل Go، Docker، Kubernetes و Microservice) علاقه‌مندی، یاد گرفتن ADR ارزش زیادی دارد. نکته جالب این است که **بسیاری از شرکت‌های بزرگ تقریباً برای هر تصمیم معماری مهم یک ADR می‌نویسند** و این کار به یکی از بهترین شیوه‌های مستندسازی معماری تبدیل شده است.
