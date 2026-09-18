@@ -26,6 +26,18 @@ docker run --rm \
   create -ext sql -dir /migrations -seq create_users_table
 ```
 
+
+For Mysql DB:
+
+```bash
+MSYS_NO_PATHCONV=1 docker run --rm \
+  -v "$(pwd -W)/migrations:/migrations" \
+  migrate/migrate \
+  create -ext sql -dir /migrations -seq create_users_table
+```
+
+
+
 This will create:
 
 ```text
@@ -93,6 +105,19 @@ docker run --rm \
   -database "postgres://postgres:password@localhost:5432/mydb?sslmode=disable" \
   up
 ```
+
+
+For mysql DB:
+
+```bash
+MSYS_NO_PATHCONV=1 docker run --rm \
+  -v "$(pwd -W)/migrations:/migrations" \
+  migrate/migrate \
+  -path=/migrations \
+  -database "mysql://root:YOUR_PASSWORD@tcp(host.docker.internal:3306)/YOUR_DATABASE" \
+  up
+```
+
 
 **But there is an important Docker networking issue here.**
 
