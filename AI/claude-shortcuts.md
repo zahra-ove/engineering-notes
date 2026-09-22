@@ -32,5 +32,11 @@ the thinking process and type `GO` to continue the thinking process.
  ![img2](image-1.png)
 
 
- 
+- in terminal, to see all response text type: `ctrl + o`
+
+- if use `Explore` in your command, the claude will use
+explore subagent to do the exploration task
+![img3](image-2.png)
+
+
 
