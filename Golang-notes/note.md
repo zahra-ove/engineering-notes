@@ -277,3 +277,6 @@ docker run ...
 بنابراین نیازی نیست وارد Container شویم؛ Commandهای `migrate` مستقیماً در همان `docker run` ارسال و اجرا می‌شوند.
 
 ---
+
+
+use `go fmt .` command to format all files in go project
