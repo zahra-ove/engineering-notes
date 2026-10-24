@@ -1,0 +1,38 @@
+###  `docker compose up` vs. `docker compose up --build`
+
+Example `docker-compose.yml`:
+
+```
+services:
+  broker:
+    build:
+      context: ./broker-service
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+```
+
+- `build`: Defines how to build the Docker image.
+- `context`: Specifies the build context directory.
+- `dockerfile`: Specifies the Dockerfile to use.
+
+First run:
+
+```
+docker compose up -d
+```
+
+If the image doesn't exist, Docker Compose automatically builds it before starting the container. Therefore, `--build` is not required for the first run.
+
+Rebuild before starting:
+
+```
+docker compose up --build -d
+```
+
+Use this when you want to ensure the image is rebuilt before starting the services, for example, after changing your Go source code.
+
+Key takeaway: If a service has a `build` section, Docker Compose builds the image automatically when needed, even without `--build`. The `--build` flag forces a build attempt before starting the services, even if an image already exists. Docker may still reuse cached layers.
+
+---
+

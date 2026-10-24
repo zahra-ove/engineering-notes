@@ -161,3 +161,32 @@ R/W layer = a transparent sheet on top. You write on the sheet, the book stays u
 
 ---
 
+**Docker: Image & Container Layers**
+
+- **Image = read-only layers.** These are shared by all containers created from the same image and stored on disk only once.
+- **Each container gets its own thin R/W layer** (the container layer) on top of the image layers.
+- **All writes go to the container layer only.** The image and other containers are not affected.
+- **Copy-on-Write (CoW):**
+  - Modify an image file → it's first copied up into the container layer, then changed.
+  - Delete a file → a "whiteout" marker is added; the original stays in the image.
+  - Handled by the storage driver (usually `overlay2`).
+- **The container layer is ephemeral:**
+  - `docker stop` / `start` → data kept.
+  - `docker rm` → container layer and its data are deleted.
+- **For persistent or shared data → use Volumes / Bind mounts** (`-v name:/path`).
+  - Data survives container removal.
+  - Can be shared between containers.
+  - Faster for heavy writes (DBs, logs).
+- **Useful commands:**
+  - `docker diff <container>` → changes in the R/W layer (A = added, C = changed, D = deleted)
+  - `docker ps -s` → size of the R/W layer (`virtual` = image + R/W layer)
+
+```
+[Container A R/W]   [Container B R/W]
+         \               /
+     [Image Layers – Read-only, Shared]
+```
+
+
+---
+
