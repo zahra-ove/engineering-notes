@@ -73,3 +73,42 @@ The ps faux command displays running processes in a tree-like structure, showing
 
 ---
 
+### `sudo -i`
+
+- **Purpose:** Opens an interactive login shell as the `root` user.
+- `sudo`: Executes a command with another user's privileges, usually `root`.
+- `-i`: Starts a login shell, loading the target user's login environment.
+
+**Example:**
+
+```bash
+sudo -i
+```
+
+The prompt typically changes from:
+
+```bash
+zahra@ubuntu:~$
+```
+
+to:
+
+```bash
+root@ubuntu:~#
+```
+
+Verify the current user:
+
+```bash
+whoami
+# Output: root
+```
+
+**Exit the root shell:**
+
+```bash
+exit
+```
+
+---
+
