@@ -234,3 +234,42 @@ In short: Use `source script.sh` when you want the script's changes to affect yo
 
 ---
 
+### Bash: Removing a Prefix
+
+- `${VAR#PATTERN}`: Removes the **shortest matching prefix** from a variable's value.
+- `${VAR##PATTERN}`: Removes the **longest matching prefix** from a variable's value.
+- The original variable remains unchanged.
+
+**Example:**
+```bash
+COUNTER="-5"
+echo "${COUNTER#-}"  # Output: 5
+```
+
+---
+
+### Bash: Parameter Expansion
+
+- `${VAR#PATTERN}`: Removes the **shortest matching prefix** from a variable's value.
+- `${VAR##PATTERN}`: Removes the **longest matching prefix** from a variable's value.
+- `${VAR%PATTERN}`: Removes the **shortest matching suffix** from a variable's value.
+- `${VAR%%PATTERN}`: Removes the **longest matching suffix** from a variable's value.
+- These operations do not modify the original variable unless the result is assigned back to it.
+
+**Examples:**
+
+```bash
+# Remove a prefix
+VAR="uid=zahra,ou=users"
+echo "${VAR#*=}"     # zahra,ou=users
+echo "${VAR##*=}"    # users
+
+# Remove a suffix
+VAR="zahra,ou=users"
+echo "${VAR%,*}"     # zahra,ou=users? 
+echo "${VAR%%,*}"    # zahra
+```
+
+
+---
+

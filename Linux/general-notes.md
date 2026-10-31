@@ -112,3 +112,6 @@ exit
 
 ---
 
+to check the exit code of last executed command: `echo $?`
+
+---
